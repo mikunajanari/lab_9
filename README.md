@@ -8,7 +8,12 @@
    
 ![image](https://github.com/user-attachments/assets/d3745e39-3f13-4b71-a3f1-73dd18c309da)
 
-Створими всередині ресурсної групи App Servicе.
+![image](https://github.com/user-attachments/assets/807a9e52-5ca2-4885-b4bf-b283baccb0a3)
+
+Створимо всередині ресурсної групи App Servicе.
+
+![image](https://github.com/user-attachments/assets/f33c6281-5ec4-48ce-bbdb-a1abf0d36f66)
+
 
 ## 2. Створимо service principal через Bash у порталі Azure.
 
@@ -40,4 +45,31 @@
 
 ![image](https://github.com/user-attachments/assets/303d398f-af11-4240-afba-98cad439a7ff)
 
+**Коментарі до коду в GitHub:**
 
+```deploy:``` - назва другого завдання (job) у workflow.
+
+```runs-on: ubuntu-latest``` - job буде виконуватись на віртуальній машині з Ubuntu останньої версії.
+
+```needs: build``` - deploy почнеться тільки після успішного завершення build.
+
+```steps:``` - початок списку кроків для виконання цього завдання.
+
+Авторизація у Microsoft Azure:
+
+```
+- name: Log in to Azure
+      uses: azure/login@v2
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+```
+
+Розгортання:
+
+```
+- name: Deploy to Azure Web App
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: lookup-frontend //назва веб-застосунку в Azure, куди потрібно розгорнути проєкт
+        images: ghcr.io/mikunajanari/bryzhyniuk_lb8:latest //Docker-образ, який потрібно задеплоїти
+```
